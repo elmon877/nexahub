@@ -1,26 +1,96 @@
-@import "tailwindcss";
+/* 1. WAJIB ADA: Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* 2. Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+/* 3. Reset dasar */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 4. Global font & Layout */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #080A0A;
+  color: #e2e2e2;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 5. Material Symbols Setup */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* 6. KUNCI PAKSA CANVAS - HANYA DI HALAMAN LOGIN */
+/* Pake selector yang lebih spesifik biar gak ganggu halaman lain */
+.login-page canvas,
+body:has(.login-page) canvas {
+  width: 100vw !important;
+  height: 100vh !important;
+  display: block !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 0 !important;
+}
+
+/* 7. Light Mode Styling */
+body.light-mode {
+  background-color: #1e88c9;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(255,255,255,0.06) 0%, transparent 50%);
+  position: relative;
+}
+
+/* Pattern background */
+body.light-mode::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.03) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.03) 75%);
+  background-size: 60px 60px;
+  background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+  pointer-events: none;
+  z-index: -1; 
+}
+
+/* 8. Dark Mode Styling */
+body.dark-mode {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+/* 9. Nexa Hub Dashboard Styles */
+.tonal-glass {
+  background: rgba(20, 26, 25, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid #1E2624;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #080A0A; }
+::-webkit-scrollbar-thumb { background: #1E2624; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #2D4F46; }
+
+/* Selection Colors */
+::selection {
+  background-color: #1a3c34;
+  color: #83a69c;
 }
