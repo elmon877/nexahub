@@ -1,11 +1,17 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// Ambil dari environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-// --- INI BAGIAN TAMBAHAN BUAT DEBUG ---
-console.log("DEBUG - URL:", supabaseUrl);
-console.log("DEBUG - KEY:", supabaseAnonKey);
-// --------------------------------------
+// Validasi environment variables
+if (!supabaseUrl) {
+  throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable')
+}
 
+if (!supabaseAnonKey) {
+  throw new Error('Missing NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable')
+}
+
+// Buat Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
