@@ -15,7 +15,7 @@
     "@splinetool/runtime": "^1.12.98",
     "@supabase/supabase-js": "^2.110.2",
     "@types/three": "^0.185.1",
-    "next": "15.2.0",
+    "next": "15.2.8",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "three": "^0.185.1"
