@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Spline from '@splinetool/react-spline';
-import { supabase } from '../../lib/supabase'; // Diimpor agar sinkron dengan sesi di dashboard
+import { useAuth } from '../context/AuthContext'; // Path disesuaikan ke folder context lu
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth(); // Mengambil fungsi login dari context terpusat
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,22 +26,17 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Menggunakan autentikasi Supabase yang sebenarnya
-      const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      // Memanggil fungsi login dari AuthContext yang mengarah ke Supabase asli
+      const res = await login(email, password);
 
-      if (authError) {
-        setError(authError.message);
+      if (!res.success) {
+        setError(res.error || 'Login gagal.');
         return;
       }
 
-      if (data?.session) {
-        // Menggunakan replace sesuai catatan agar user tidak bisa klik 'Back' ke login
-        router.replace('/dashboard');
-        router.refresh(); 
-      }
+      // Jika login berhasil, langsung arahkan ke dashboard
+      router.replace('/dashboard');
+      router.refresh(); 
     } catch (err) {
       setError('Login gagal. Terjadi kesalahan jaringan.');
     } finally {
@@ -94,23 +90,39 @@ export default function LoginPage() {
             <h1 style={{ color: 'white', textAlign: 'center', marginBottom: '8px' }}>Login</h1>
             
             <form onSubmit={handleSubmit}>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} 
-                placeholder="Email" required style={{
-                width: '100%', padding: '14px', marginBottom: '16px', background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '12px', color: 'white'
-              }}/>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} 
-                placeholder="Password" required style={{
-                width: '100%', padding: '14px', marginBottom: '16px', background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '12px', color: 'white'
-              }}/>
+              <input 
+                type="email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                placeholder="Email" 
+                required 
+                style={{
+                  width: '100%', padding: '14px', marginBottom: '16px', background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '12px', color: 'white'
+                }}
+              />
+              <input 
+                type="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                placeholder="Password" 
+                required 
+                style={{
+                  width: '100%', padding: '14px', marginBottom: '16px', background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '12px', color: 'white'
+                }}
+              />
               
               {error && <div style={{ color: '#ff9999', marginBottom: '16px', fontSize: '0.88rem' }}>{error}</div>}
 
-              <button type="submit" disabled={loading} style={{
-                width: '100%', padding: '16px', background: 'linear-gradient(135deg, #00d4aa 0%, #00a8ff 100%)',
-                color: 'white', border: 'none', borderRadius: '12px', cursor: loading ? 'not-allowed' : 'pointer'
-              }}>
+              <button 
+                type="submit" 
+                disabled={loading} 
+                style={{
+                  width: '100%', padding: '16px', background: 'linear-gradient(135deg, #00d4aa 0%, #00a8ff 100%)',
+                  color: 'white', border: 'none', borderRadius: '12px', cursor: loading ? 'not-allowed' : 'pointer'
+                }}
+              >
                 {loading ? 'Memproses...' : 'Login'}
               </button>
             </form>
