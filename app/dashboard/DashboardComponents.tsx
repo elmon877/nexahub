@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useRef, useEffect } from 'react'
 
 const CATEGORY_META: Record<string, { label: string; color: string; icon: string }> = {
@@ -20,6 +19,10 @@ function formatFileSize(bytes: number) {
   if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB'
   return (bytes / 1048576).toFixed(1) + ' MB'
 }
+
+/* ---------------------------------- */
+/* CARD                                */
+/* ---------------------------------- */
 
 export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCategoryColor, getCategoryIcon, catalogNo }: any) {
   const [hover, setHover] = useState(false)
@@ -48,6 +51,7 @@ export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCate
         borderColor: hover ? color : '#DEDACC',
       }}
     >
+      {/* Catalog stamp */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace', fontSize: '0.68rem', color: '#9B9483', letterSpacing: '0.03em' }}>
           N° {String(catalogNo ?? '').padStart(3, '0')}
@@ -61,6 +65,7 @@ export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCate
         </button>
       </div>
 
+      {/* Kategori label */}
       <div style={{
         display: 'inline-flex', alignItems: 'center', gap: '6px', color, fontSize: '0.68rem', fontWeight: 700,
         letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: `2px solid ${color}`, paddingBottom: '3px', width: 'fit-content',
@@ -69,10 +74,12 @@ export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCate
         {item.kategori ? item.kategori.charAt(0).toUpperCase() + item.kategori.slice(1) : 'Catatan'}
       </div>
 
+      {/* Judul */}
       <h3 style={{ margin: '2px 0 0 0', color: '#1C2420', fontFamily: '"Fraunces", Georgia, serif', fontSize: '1.15rem', fontWeight: 600, lineHeight: 1.3 }}>
         {item.judul}
       </h3>
 
+      {/* Isi */}
       <p style={{
         margin: 0, fontSize: '0.85rem', color: '#6B6558', lineHeight: 1.6,
         display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden', minHeight: '4em',
@@ -94,6 +101,7 @@ export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCate
         </a>
       )}
 
+      {/* Footer */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '10px', marginTop: '2px', borderTop: '1px dashed #DEDACC' }}>
         <span style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace', fontSize: '0.68rem', color: '#9B9483' }}>
           {formatTanggal(item.created_at) || 'baru saja'}
@@ -114,6 +122,10 @@ export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCate
     </div>
   )
 }
+
+/* ---------------------------------- */
+/* DETAIL MODAL                        */
+/* ---------------------------------- */
 
 export function DetailModal({ item, onClose, onEdit, onDelete, onFavorite, getCategoryColor, getCategoryIcon, catalogNo }: any) {
   if (!item) return null
@@ -142,6 +154,7 @@ export function DetailModal({ item, onClose, onEdit, onDelete, onFavorite, getCa
 
         <div style={{ padding: '22px 28px' }}>
           <p style={{ margin: 0, fontSize: '0.92rem', color: '#3F3C33', lineHeight: 1.75, whiteSpace: 'pre-wrap' }}>{item.isi}</p>
+
           {item.link && (
             <a href={item.link} target="_blank" rel="noopener noreferrer" style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '16px', padding: '8px 12px',
@@ -151,6 +164,7 @@ export function DetailModal({ item, onClose, onEdit, onDelete, onFavorite, getCa
               📎 {item.kategori === 'tautan' ? 'Buka tautan' : 'Lihat dokumen'}
             </a>
           )}
+
           <div style={{ fontSize: '0.72rem', color: '#9B9483', fontFamily: '"JetBrains Mono", monospace', marginTop: '18px' }}>
             Dibuat {formatTanggal(item.created_at) || 'baru saja'}
           </div>
@@ -164,14 +178,24 @@ export function DetailModal({ item, onClose, onEdit, onDelete, onFavorite, getCa
             {item.favorite ? '★ Favorit' : '☆ Tandai favorit'}
           </button>
           <div style={{ display: 'flex', gap: '8px' }}>
-            <button onClick={() => onDelete(item)} style={{ padding: '8px 14px', background: 'transparent', color: '#A03A3A', border: '1px solid #E9D3D3', borderRadius: '3px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>Hapus</button>
-            <button onClick={() => onEdit(item)} style={{ padding: '8px 16px', background: '#1F6F5C', color: '#FBFAF6', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700 }}>Edit entri</button>
+            <button
+              onClick={() => onDelete(item)}
+              style={{ padding: '8px 14px', background: 'transparent', color: '#A03A3A', border: '1px solid #E9D3D3', borderRadius: '3px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}
+            >Hapus</button>
+            <button
+              onClick={() => onEdit(item)}
+              style={{ padding: '8px 16px', background: '#1F6F5C', color: '#FBFAF6', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 700 }}
+            >Edit entri</button>
           </div>
         </div>
       </div>
     </div>
   )
 }
+
+/* ---------------------------------- */
+/* CONFIRM DIALOG                      */
+/* ---------------------------------- */
 
 export function ConfirmDialog({ open, title, description, confirmLabel = 'Hapus', onConfirm, onCancel }: any) {
   if (!open) return null
@@ -188,6 +212,10 @@ export function ConfirmDialog({ open, title, description, confirmLabel = 'Hapus'
     </div>
   )
 }
+
+/* ---------------------------------- */
+/* TOAST                               */
+/* ---------------------------------- */
 
 export type Toast = { id: number; message: string; type?: 'success' | 'error' | 'info' }
 
@@ -224,6 +252,10 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: number)
     </div>
   )
 }
+
+/* ---------------------------------- */
+/* MODAL TAMBAH / EDIT                 */
+/* ---------------------------------- */
 
 export function ModalSimple({ isOpen, onClose, onSave, editingId, initialData, getCategoryIcon, saving }: any) {
   const [tipeKonten, setTipeKonten] = useState<'catatan' | 'dokumen' | 'tautan'>('catatan')

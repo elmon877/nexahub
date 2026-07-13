@@ -15,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "incremental": false,
     "forceConsistentCasingInFileNames": true,
     "plugins": [
@@ -30,12 +30,14 @@
     }
   },
   "include": [
-    "next-env.d.js",
     "**/*.ts",
     "**/*.tsx",
+    ".next/dev/types/**/*.js",
     ".next/types/**/*.js",
-    ".next/dev/types/**/*.js"
-, "next.config.js"  ],
+    "next-env.d.js",
+    "next.config.js",
+    ".next/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
