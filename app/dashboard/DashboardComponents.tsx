@@ -21,7 +21,7 @@ function formatFileSize(bytes: number) {
 }
 
 /* ---------------------------------- */
-/* CARD                                */
+/* CARD                               */
 /* ---------------------------------- */
 
 export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCategoryColor, getCategoryIcon, catalogNo }: any) {
@@ -49,9 +49,9 @@ export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCate
         transform: hover ? 'translateY(-3px)' : 'none',
         transition: 'box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease',
         borderColor: hover ? color : '#DEDACC',
+        zIndex: hover ? 2 : 1,
       }}
     >
-      {/* Catalog stamp */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace', fontSize: '0.68rem', color: '#9B9483', letterSpacing: '0.03em' }}>
           N° {String(catalogNo ?? '').padStart(3, '0')}
@@ -59,30 +59,27 @@ export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCate
         <button
           onClick={(e) => { e.stopPropagation(); onFavorite(item.id, item.favorite) }}
           aria-label={item.favorite ? 'Hapus dari favorit' : 'Tandai favorit'}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.05rem', lineHeight: 1, color: item.favorite ? '#8B5E34' : '#D4CFC0', padding: 0 }}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.05rem', lineHeight: '1', color: item.favorite ? '#8B5E34' : '#D4CFC0', padding: 0 }}
         >
           {item.favorite ? '★' : '☆'}
         </button>
       </div>
 
-      {/* Kategori label */}
       <div style={{
-        display: 'inline-flex', alignItems: 'center', gap: '6px', color, fontSize: '0.68rem', fontWeight: 700,
+        display: 'inline-flex', alignItems: 'center', gap: '6px', color: color, fontSize: '0.68rem', fontWeight: 700,
         letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: `2px solid ${color}`, paddingBottom: '3px', width: 'fit-content',
       }}>
-        <span aria-hidden>{icon}</span>
+        <span aria-hidden="true">{icon}</span>
         {item.kategori ? item.kategori.charAt(0).toUpperCase() + item.kategori.slice(1) : 'Catatan'}
       </div>
 
-      {/* Judul */}
-      <h3 style={{ margin: '2px 0 0 0', color: '#1C2420', fontFamily: '"Fraunces", Georgia, serif', fontSize: '1.15rem', fontWeight: 600, lineHeight: 1.3 }}>
+      <h3 style={{ margin: '2px 0 0 0', color: '#1C2420', fontFamily: '"Fraunces", Georgia, serif', fontSize: '1.15rem', fontWeight: 600, lineHeight: '1.3' }}>
         {item.judul}
       </h3>
 
-      {/* Isi */}
       <p style={{
-        margin: 0, fontSize: '0.85rem', color: '#6B6558', lineHeight: 1.6,
-        display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden', minHeight: '4em',
+        margin: 0, fontSize: '0.85rem', color: '#6B6558', lineHeight: '1.6',
+        display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: '4em',
       }}>
         {item.isi}
       </p>
@@ -101,7 +98,6 @@ export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCate
         </a>
       )}
 
-      {/* Footer */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '10px', marginTop: '2px', borderTop: '1px dashed #DEDACC' }}>
         <span style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace', fontSize: '0.68rem', color: '#9B9483' }}>
           {formatTanggal(item.created_at) || 'baru saja'}
@@ -124,7 +120,7 @@ export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCate
 }
 
 /* ---------------------------------- */
-/* DETAIL MODAL                        */
+/* DETAIL MODAL                       */
 /* ---------------------------------- */
 
 export function DetailModal({ item, onClose, onEdit, onDelete, onFavorite, getCategoryColor, getCategoryIcon, catalogNo }: any) {
@@ -134,7 +130,7 @@ export function DetailModal({ item, onClose, onEdit, onDelete, onFavorite, getCa
 
   return (
     <div
-      style={{ position: 'fixed', inset: 0, background: 'rgba(20,25,22,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '16px' }}
+      style={{ position: 'fixed', inset: '0', background: 'rgba(20,25,22,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, padding: '16px' }}
       onClick={onClose}
     >
       <div
@@ -146,14 +142,14 @@ export function DetailModal({ item, onClose, onEdit, onDelete, onFavorite, getCa
             <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.68rem', color: '#9B9483' }}>N° {String(catalogNo ?? '').padStart(3, '0')}</span>
             <button onClick={onClose} aria-label="Tutup" style={{ background: 'transparent', border: '1px solid #DEDACC', width: '26px', height: '26px', borderRadius: '3px', cursor: 'pointer', color: '#6B6558' }}>✕</button>
           </div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color, fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: `2px solid ${color}`, paddingBottom: '3px', marginBottom: '10px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: color, fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', borderBottom: `2px solid ${color}`, paddingBottom: '3px', marginBottom: '10px' }}>
             <span>{icon}</span>{item.kategori}
           </div>
-          <h2 style={{ margin: 0, fontFamily: '"Fraunces", Georgia, serif', fontSize: '1.5rem', fontWeight: 600, color: '#1C2420', lineHeight: 1.3 }}>{item.judul}</h2>
+          <h2 style={{ margin: 0, fontFamily: '"Fraunces", Georgia, serif', fontSize: '1.5rem', fontWeight: 600, color: '#1C2420', lineHeight: '1.3' }}>{item.judul}</h2>
         </div>
 
         <div style={{ padding: '22px 28px' }}>
-          <p style={{ margin: 0, fontSize: '0.92rem', color: '#3F3C33', lineHeight: 1.75, whiteSpace: 'pre-wrap' }}>{item.isi}</p>
+          <p style={{ margin: 0, fontSize: '0.92rem', color: '#3F3C33', lineHeight: '1.75', whiteSpace: 'pre-wrap' }}>{item.isi}</p>
 
           {item.link && (
             <a href={item.link} target="_blank" rel="noopener noreferrer" style={{
@@ -194,16 +190,16 @@ export function DetailModal({ item, onClose, onEdit, onDelete, onFavorite, getCa
 }
 
 /* ---------------------------------- */
-/* CONFIRM DIALOG                      */
+/* CONFIRM DIALOG                     */
 /* ---------------------------------- */
 
 export function ConfirmDialog({ open, title, description, confirmLabel = 'Hapus', onConfirm, onCancel }: any) {
   if (!open) return null
   return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,25,22,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1200, padding: '16px' }} onClick={onCancel}>
+    <div style={{ position: 'fixed', inset: '0', background: 'rgba(20,25,22,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 20, padding: '16px' }} onClick={onCancel}>
       <div onClick={(e) => e.stopPropagation()} style={{ background: '#FBFAF6', border: '1px solid #DEDACC', borderRadius: '4px', padding: '24px', width: '100%', maxWidth: '360px', boxShadow: '0 24px 60px rgba(20,25,22,0.28)' }}>
         <h3 style={{ margin: '0 0 8px 0', fontFamily: '"Fraunces", Georgia, serif', fontSize: '1.15rem', fontWeight: 600, color: '#1C2420' }}>{title}</h3>
-        <p style={{ margin: '0 0 20px 0', fontSize: '0.85rem', color: '#6B6558', lineHeight: 1.5 }}>{description}</p>
+        <p style={{ margin: '0 0 20px 0', fontSize: '0.85rem', color: '#6B6558', lineHeight: '1.5' }}>{description}</p>
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
           <button onClick={onCancel} style={{ padding: '9px 14px', background: 'transparent', color: '#6B6558', border: '1px solid #DEDACC', borderRadius: '3px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600 }}>Batal</button>
           <button onClick={onConfirm} style={{ padding: '9px 16px', background: '#A03A3A', color: '#FBFAF6', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 700 }}>{confirmLabel}</button>
@@ -214,14 +210,14 @@ export function ConfirmDialog({ open, title, description, confirmLabel = 'Hapus'
 }
 
 /* ---------------------------------- */
-/* TOAST                               */
+/* TOAST                              */
 /* ---------------------------------- */
 
 export type Toast = { id: number; message: string; type?: 'success' | 'error' | 'info' }
 
 export function ToastStack({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id: number) => void }) {
   return (
-    <div style={{ position: 'fixed', bottom: '20px', right: '20px', display: 'flex', flexDirection: 'column', gap: '8px', zIndex: 1300 }}>
+    <div style={{ position: 'fixed', bottom: '20px', right: '20px', display: 'flex', flexDirection: 'column', gap: '8px', zIndex: 30 }}>
       {toasts.map(t => <ToastItem key={t.id} toast={t} onDismiss={onDismiss} />)}
     </div>
   )
@@ -231,7 +227,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: number)
   useEffect(() => {
     const timer = setTimeout(() => onDismiss(toast.id), 3500)
     return () => clearTimeout(timer)
-  }, [toast.id])
+  }, [toast.id, onDismiss])
 
   const colors: any = {
     success: { bg: '#EAF3EF', border: '#B9D8CC', text: '#1F6F5C', icon: '✓' },
@@ -254,7 +250,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: number)
 }
 
 /* ---------------------------------- */
-/* MODAL TAMBAH / EDIT                 */
+/* MODAL TAMBAH / EDIT                */
 /* ---------------------------------- */
 
 export function ModalSimple({ isOpen, onClose, onSave, editingId, initialData, getCategoryIcon, saving }: any) {
@@ -300,7 +296,7 @@ export function ModalSimple({ isOpen, onClose, onSave, editingId, initialData, g
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,25,22,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '16px' }} onClick={onClose}>
+    <div style={{ position: 'fixed', inset: '0', background: 'rgba(20,25,22,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, padding: '16px' }} onClick={onClose}>
       <div onClick={(e) => e.stopPropagation()} style={{ background: '#FBFAF6', padding: '28px', borderRadius: '4px', width: '100%', maxWidth: '460px', border: '1px solid #DEDACC', boxShadow: '0 24px 60px rgba(20,25,22,0.28)', maxHeight: '90vh', overflowY: 'auto' }}>
         <div style={{ marginBottom: '20px', borderBottom: '2px solid #1C2420', paddingBottom: '14px' }}>
           <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.65rem', color: '#9B9483', marginBottom: '4px', letterSpacing: '0.06em' }}>

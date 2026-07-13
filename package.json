@@ -15,9 +15,9 @@
     "@splinetool/runtime": "^1.12.98",
     "@supabase/supabase-js": "^2.110.2",
     "@types/three": "^0.185.1",
-    "next": "15.2.8",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "next": "^16.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "three": "^0.185.1"
   },
   "devDependencies": {
@@ -27,9 +27,13 @@
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.5.2",
     "eslint": "^9",
-    "eslint-config-next": "15.2.0",
+    "eslint-config-next": "^16.2.10",
     "postcss": "^8.5.16",
     "tailwindcss": "^4.3.2",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "sharp@0.33.5": true,
+    "unrs-resolver@1.12.2": true
   }
 }

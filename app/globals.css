@@ -1,11 +1,11 @@
-/* 1. WAJIB ADA: Tailwind */
+/* 1. Import Fonts (WAJIB PALING ATAS SEBELUM TAILWIND) */
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+/* 2. WAJIB ADA: Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* 2. Import Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
 /* 3. Reset dasar */
 * {
