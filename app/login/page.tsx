@@ -1,8 +1,9 @@
-'use client'
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Spline from '@splinetool/react-spline';
+import { supabase } from '../../lib/supabase'; // Diimpor agar sinkron dengan sesi di dashboard
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,19 +25,24 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Simulasi validasi (ganti dengan logika autentikasi aslimu nanti)
-      if (email && password) {
-        // Gunakan sessionStorage atau simpan di state/cookie jika ingin lebih aman
-        localStorage.setItem('userEmail', email);
-        
-        // PENTING: Gunakan replace agar user tidak bisa balik ke login via tombol back
-        router.push('/dashboard');
-        router.refresh(); // Memaksa refresh route
-      } else {
-        setError('Email dan password harus diisi!');
+      // Menggunakan autentikasi Supabase yang sebenarnya
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError) {
+        setError(authError.message);
+        return;
+      }
+
+      if (data?.session) {
+        // Menggunakan replace sesuai catatan agar user tidak bisa klik 'Back' ke login
+        router.replace('/dashboard');
+        router.refresh(); 
       }
     } catch (err) {
-      setError('Login gagal. Coba lagi.');
+      setError('Login gagal. Terjadi kesalahan jaringan.');
     } finally {
       setLoading(false);
     }
@@ -99,7 +105,7 @@ export default function LoginPage() {
                 border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '12px', color: 'white'
               }}/>
               
-              {error && <div style={{ color: '#ff9999', marginBottom: '16px' }}>{error}</div>}
+              {error && <div style={{ color: '#ff9999', marginBottom: '16px', fontSize: '0.88rem' }}>{error}</div>}
 
               <button type="submit" disabled={loading} style={{
                 width: '100%', padding: '16px', background: 'linear-gradient(135deg, #00d4aa 0%, #00a8ff 100%)',

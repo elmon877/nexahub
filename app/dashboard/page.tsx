@@ -49,29 +49,45 @@ export default function DashboardPage() {
     setToasts(prev => prev.filter(t => t.id !== id))
   }
 
-  // ---- AUTH GUARD ----
+  // ---- AUTH GUARD DISEMPURNAKAN ----
   useEffect(() => {
     let mounted = true
-    supabase.auth.getSession().then(({ data }: any) => {
+
+    const periksaSesi = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
       if (!mounted) return
-      if (!data.session) {
+      if (!session) {
         router.replace('/login')
         return
       }
-      setUser({ id: data.session.user.id, name: data.session.user.email?.split('@')[0] || 'pengguna' })
+      setUser({ id: session.user.id, name: session.user.email?.split('@')[0] || 'pengguna' })
       setAuthChecked(true)
-    })
-    const { data: listener } = supabase.auth.onAuthStateChange((_event: string, session: any) => {
+    }
+
+    periksaSesi()
+
+    // Ambil subscription dengan destructuring Supabase v2 yang benar
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: string, session: any) => {
+      if (!mounted) return
       if (!session) {
+        setUser(null)
+        setAuthChecked(false)
         router.replace('/login')
       } else {
         setUser({ id: session.user.id, name: session.user.email?.split('@')[0] || 'pengguna' })
+        setAuthChecked(true)
       }
     })
-    return () => { mounted = false; listener?.subscription?.unsubscribe() }
+
+    return () => { mounted = false; subscription?.unsubscribe() }
   }, [router])
 
-  useEffect(() => { if (authChecked) ambilData() }, [authChecked])
+  // Pastikan data baru diambil ketika auth sukses dan ID user valid
+  useEffect(() => { 
+    if (authChecked && user?.id) {
+      ambilData() 
+    }
+  }, [authChecked, user?.id])
 
   async function logout() {
     await supabase.auth.signOut()
@@ -79,8 +95,15 @@ export default function DashboardPage() {
   }
 
   async function ambilData() {
+    if (!user?.id) return
     setLoading(true)
-    const { data, error } = await supabase.from('elmon').select('*').order('created_at', { ascending: false })
+    // Ditambahkan filter .eq('user_id', user.id) agar data sesuai akun masing-masing
+    const { data, error } = await supabase
+      .from('elmon')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+
     if (error) { notify('Gagal memuat data: ' + error.message, 'error') }
     setCatatan(data || [])
     setLoading(false)
@@ -291,7 +314,7 @@ export default function DashboardPage() {
       {/* MAIN */}
       <div className="main-content">
         {/* Header */}
-        <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
+        <div style={{ marginBottom: '24px', display: 'flex', justifycontent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
           <div>
             <div style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.68rem', color: '#8B8672', letterSpacing: '0.06em', marginBottom: '8px' }}>
               KATALOG — {new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}
