@@ -21,7 +21,7 @@ function formatFileSize(bytes: number) {
 }
 
 /* ---------------------------------- */
-/* CARD                                */
+/* CARD                               */
 /* ---------------------------------- */
 
 export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCategoryColor, getCategoryIcon, catalogNo }: any) {
@@ -124,7 +124,7 @@ export function CardSimple({ item, onDelete, onEdit, onFavorite, onOpen, getCate
 }
 
 /* ---------------------------------- */
-/* DETAIL MODAL                        */
+/* DETAIL MODAL                       */
 /* ---------------------------------- */
 
 export function DetailModal({ item, onClose, onEdit, onDelete, onFavorite, getCategoryColor, getCategoryIcon, catalogNo }: any) {
@@ -194,7 +194,7 @@ export function DetailModal({ item, onClose, onEdit, onDelete, onFavorite, getCa
 }
 
 /* ---------------------------------- */
-/* CONFIRM DIALOG                      */
+/* CONFIRM DIALOG                     */
 /* ---------------------------------- */
 
 export function ConfirmDialog({ open, title, description, confirmLabel = 'Hapus', onConfirm, onCancel }: any) {
@@ -214,7 +214,7 @@ export function ConfirmDialog({ open, title, description, confirmLabel = 'Hapus'
 }
 
 /* ---------------------------------- */
-/* TOAST                               */
+/* TOAST                              */
 /* ---------------------------------- */
 
 export type Toast = { id: number; message: string; type?: 'success' | 'error' | 'info' }
@@ -231,7 +231,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: number)
   useEffect(() => {
     const timer = setTimeout(() => onDismiss(toast.id), 3500)
     return () => clearTimeout(timer)
-  }, [toast.id])
+  }, [toast.id, onDismiss]) // Menambahkan onDismiss ke dependency array agar linter aman
 
   const colors: any = {
     success: { bg: '#EAF3EF', border: '#B9D8CC', text: '#1F6F5C', icon: '✓' },
@@ -254,7 +254,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: number)
 }
 
 /* ---------------------------------- */
-/* MODAL TAMBAH / EDIT                 */
+/* MODAL TAMBAH / EDIT                */
 /* ---------------------------------- */
 
 export function ModalSimple({ isOpen, onClose, onSave, editingId, initialData, getCategoryIcon, saving }: any) {
